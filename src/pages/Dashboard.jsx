@@ -4,13 +4,19 @@ import RecentActivity from "../components/RecentActivity";
 
 function Dashboard() {
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6">
-         Dashboard Overview
-      </h1>
+     <div>
+      <div className="mb-10">
+        <h1 className="text-4xl font-bold text-slate-800">
+          Dashboard Overview
+        </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <StatCard
+        <p className="text-gray-500 mt-2">
+          Track projects, team productivity, and task progress.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <StatCard
           title="Active Projects"
           value="12"
           change="+2 this month"
@@ -25,10 +31,11 @@ function Dashboard() {
         <StatCard
           title="Team Members"
           value="18"
-          change="+3 new members"
+          change="+3 new hires"
         />
       </div>
-      <RecentActivity/>
+
+      <RecentActivity />
     </div>
   );
 }

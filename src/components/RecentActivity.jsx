@@ -7,12 +7,12 @@ function RecentActivity() {
     ]
 
     return (
-        <div className="bg-white rounded-2xl shadow p-6">
-            <h2 className="text-xl font-bold mb-4">  Recent Activity </h2>
+        <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100">
+            <h2 className="text-2xl font-bold mb-6">  Recent Activity </h2>
 
             <ul className="space-y-4">
                 {activities.map((activity , index) => (
-                    <li key={index} className="text-gray-200 border-b pb-2">
+                    <li key={index} className="pb-3 border-b last:border-none text-gray-700">
                         {activities}
                     </li>
                 ))}
