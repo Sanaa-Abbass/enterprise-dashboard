@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
-const getDefaultState = () => ({
+const getDefaultState = () => ( {
   columns: {
     todo: {
       title: "To Do",
@@ -53,6 +52,32 @@ const taskSlice = createSlice({
       destinationColumn.tasks.splice(destination.index, 0, movedTask);
     },
 
+
+    updateTask: (state, action) => {
+      const { columnId, updatedTask } = action.payload;
+
+      const column = state.columns?.[columnId];
+
+      // 🛡️ HARD SAFETY CHECK
+      if (!column) {
+        console.error("Invalid columnId:", columnId);
+        return;
+      }
+
+      if (!Array.isArray(column.tasks)) {
+        console.error("Tasks missing in column:", columnId);
+        column.tasks = []; // auto-fix broken state
+      }
+
+      const index = column.tasks.findIndex(
+        (task) => task.id === updatedTask.id
+      );
+
+      if (index !== -1) {
+        column.tasks[index] = updatedTask;
+      }
+    },
+
     extraReducers: (builder) => {},
 
 
@@ -64,5 +89,5 @@ const taskSlice = createSlice({
 
 
 
-export const { addTask, deleteTask, moveTask } = taskSlice.actions;
+export const { addTask, deleteTask, updateTask, moveTask } = taskSlice.actions;
 export default taskSlice.reducer;

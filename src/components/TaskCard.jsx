@@ -1,15 +1,30 @@
-import {useDispatch} from "react-redux"
+import { useState } from "react";
+import { useDispatch } from "react-redux"
 import {deleteTask} from "../features/taskes/TaskSlice"
+import { updateTask } from "../features/taskes/TaskSlice";
+import TaskModal from "./TaskModal";
 
 
 
 function TaskCard({ task, columnId }) {
   const dispatch = useDispatch();
+  const [isEditing, setIsEditing] = useState(false);
 
-   const priorityColors = {
+  const priorityColors = {
     High: "bg-red-100 text-red-600",
     Medium: "bg-yellow-100 text-yellow-700",
     Low: "bg-green-100 text-green-600",
+  };
+
+  const handleEdit = (updatedTask) => {
+    dispatch(
+      updateTask({
+        columnId,
+        updatedTask,
+      })
+    );
+
+    setIsEditing(false);
   };
 
   return (
@@ -32,6 +47,13 @@ function TaskCard({ task, columnId }) {
       </p>
 
       <button
+        onClick={() => setIsEditing(true)}
+        className="text-blue-500 text-sm mr-3 hover:text-blue-700"
+        >
+        Edit
+      </button>
+
+      <button
         onClick={() =>
           dispatch(deleteTask({
             columnId,
@@ -42,8 +64,17 @@ function TaskCard({ task, columnId }) {
       >
         Delete
       </button>
+
+      <TaskModal
+          isOpen={isEditing}
+          onClose={() => setIsEditing(false)}
+          onSave={handleEdit}
+          editingTask={task}
+      />
     </div>
   );
 }
+
+
 
 export default TaskCard;

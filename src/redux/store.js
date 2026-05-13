@@ -4,7 +4,7 @@ import taskReducer from "../features/taskes/TaskSlice.js";
 
 // SAVE STATE
 const saveState = (state) => {
-  localStorage.setItem("kanban", JSON.stringify(state));
+  localStorage.setItem("preloadedState", JSON.stringify(state));
 };
 
 

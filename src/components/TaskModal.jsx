@@ -1,71 +1,86 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-
-function TaskModal({ isOpen, onClose, onSave }) {
+function TaskModal({
+  isOpen,
+  onClose,
+  onSave,
+  editingTask,
+}) {
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("Low");
   const [dueDate, setDueDate] = useState("");
 
+  // ✅ Load editing data correctly
+  useEffect(() => {
+    if (editingTask) {
+      setTitle(editingTask.title || "");
+      setPriority(editingTask.priority || "Low");
+      setDueDate(editingTask.dueDate || "");
+    } else {
+      setTitle("");
+      setPriority("Low");
+      setDueDate("");
+    }
+  }, [editingTask]);
+
   if (!isOpen) return null;
 
   const handleSubmit = () => {
-    if (!title) return;
+    if (!title.trim()) return;
 
     onSave({
-      id: Date.now().toString(),
+      id: editingTask?.id || Date.now().toString(),
       title,
       priority,
       dueDate,
     });
 
-    setTitle("");
-    setPriority("Low");
-    setDueDate("");
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-2xl w-96 shadow-xl">
         <h2 className="text-xl font-bold mb-4">
-          Add New Task
+          {editingTask ? "Edit Task" : "Add Task"}
         </h2>
 
         <input
-          className="w-full border p-2 mb-3 rounded"
+          type="text"
           placeholder="Task title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          className="w-full border p-2 rounded mb-3"
         />
 
         <select
-          className="w-full border p-2 mb-3 rounded"
           value={priority}
           onChange={(e) => setPriority(e.target.value)}
+          className="w-full border p-2 rounded mb-3"
         >
-          <option>High</option>
-          <option>Medium</option>
-          <option>Low</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
         </select>
 
         <input
           type="date"
-          className="w-full border p-2 mb-4 rounded"
           value={dueDate}
           onChange={(e) => setDueDate(e.target.value)}
+          className="w-full border p-2 rounded mb-4"
         />
 
         <div className="flex justify-end gap-2">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-200 rounded"
+            className="px-4 py-2 rounded bg-gray-200"
           >
             Cancel
           </button>
 
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 bg-blue-500 text-white rounded"
+            className="px-4 py-2 rounded bg-blue-500 text-white"
           >
             Save
           </button>
