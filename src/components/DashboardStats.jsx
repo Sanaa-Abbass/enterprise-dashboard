@@ -1,4 +1,9 @@
-function DashboardStats({ columns }) {
+// src/components/DashboardStats.jsx
+
+function DashboardStats({
+  columns,
+  darkMode,
+}) {
   // ✅ Get all tasks
   const allTasks = Object.values(columns).flatMap(
     (column) => column.tasks
@@ -17,7 +22,7 @@ function DashboardStats({ columns }) {
     (task) => task.priority === "High"
   ).length;
 
-  // ✅ Card Data
+  // ✅ Stats Cards
   const stats = [
     {
       title: "Total Tasks",
@@ -42,13 +47,29 @@ function DashboardStats({ columns }) {
       {stats.map((stat) => (
         <div
           key={stat.title}
-          className="bg-white rounded-2xl shadow p-5 border"
+          className={`rounded-2xl shadow-md p-5 border hover:shadow-xl transition ${
+            darkMode
+              ? "bg-slate-800 border-slate-700"
+              : "bg-white"
+          }`}
         >
-          <p className="text-gray-500 text-sm mb-2">
+          <p
+            className={`text-sm mb-2 ${
+              darkMode
+                ? "text-gray-300"
+                : "text-gray-500"
+            }`}
+          >
             {stat.title}
           </p>
 
-          <h2 className="text-3xl font-bold text-slate-800">
+          <h2
+            className={`text-3xl font-bold ${
+              darkMode
+                ? "text-white"
+                : "text-slate-800"
+            }`}
+          >
             {stat.value}
           </h2>
         </div>

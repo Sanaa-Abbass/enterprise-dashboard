@@ -1,6 +1,6 @@
 // src/pages/Tasks.jsx
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { DragDropContext } from "@hello-pangea/dnd";
@@ -18,11 +18,22 @@ function Tasks() {
     (state) => state.tasks.columns
   );
 
-  // ✅ Search state
+  // ✅ Search + Filter
   const [search, setSearch] = useState("");
-
-  // ✅ Priority filter
   const [filter, setFilter] = useState("all");
+
+  // ✅ Dark mode
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("theme") === "dark";
+  });
+
+  // ✅ Save theme
+  useEffect(() => {
+    localStorage.setItem(
+      "theme",
+      darkMode ? "dark" : "light"
+    );
+  }, [darkMode]);
 
   // ✅ Drag & Drop
   const onDragEnd = (result) => {
@@ -66,14 +77,43 @@ function Tasks() {
   );
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      {/* PAGE TITLE */}
-      <h1 className="text-4xl font-bold text-slate-800 mb-8">
+    <div
+      className={`p-6 min-h-screen transition-colors duration-300 ${
+        darkMode
+          ? "bg-slate-900 text-white"
+          : "bg-gray-50 text-black"
+      }`}
+    >
+      {/* ✅ DARK MODE BUTTON */}
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={() =>
+            setDarkMode(!darkMode)
+          }
+          className="px-4 py-2 rounded-xl bg-blue-500 text-white hover:bg-blue-600 transition"
+        >
+          {darkMode
+            ? "Light Mode"
+            : "Dark Mode"}
+        </button>
+      </div>
+
+      {/* ✅ PAGE TITLE */}
+      <h1
+        className={`text-4xl font-bold mb-8 ${
+          darkMode
+            ? "text-white"
+            : "text-slate-800"
+        }`}
+      >
         Enterprise Project Dashboard
       </h1>
 
       {/* ✅ ANALYTICS */}
-      <DashboardStats columns={columns} />
+      <DashboardStats
+        columns={columns}
+        darkMode={darkMode}
+      />
 
       {/* ✅ SEARCH + FILTER */}
       <div className="flex gap-4 mb-8">
@@ -84,7 +124,11 @@ function Tasks() {
           onChange={(e) =>
             setSearch(e.target.value)
           }
-          className="border p-3 rounded-xl w-1/2 bg-white shadow-sm"
+          className={`border p-3 rounded-xl w-1/2 shadow-sm ${
+            darkMode
+              ? "bg-slate-800 text-white border-slate-700"
+              : "bg-white"
+          }`}
         />
 
         <select
@@ -92,12 +136,27 @@ function Tasks() {
           onChange={(e) =>
             setFilter(e.target.value)
           }
-          className="border p-3 rounded-xl bg-white shadow-sm"
+          className={`border p-3 rounded-xl shadow-sm ${
+            darkMode
+              ? "bg-slate-800 text-white border-slate-700"
+              : "bg-white"
+          }`}
         >
-          <option value="all">All Priorities</option>
-          <option value="High">High</option>
-          <option value="Medium">Medium</option>
-          <option value="Low">Low</option>
+          <option value="all">
+            All Priorities
+          </option>
+
+          <option value="High">
+            High
+          </option>
+
+          <option value="Medium">
+            Medium
+          </option>
+
+          <option value="Low">
+            Low
+          </option>
         </select>
       </div>
 
@@ -111,6 +170,7 @@ function Tasks() {
                 columnId={columnId}
                 title={column.title}
                 tasks={column.tasks}
+                darkMode={darkMode}
               />
             )
           )}
