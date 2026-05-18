@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { addTask } from "../features/taskes/TaskSlice";
 import TaskModal from "./TaskModal";
 import { useState } from "react";
+import { createTask } from "../api/tasksApi";
 
 
 function TaskColumn({ title, tasks, columnId }) {
@@ -11,13 +12,20 @@ function TaskColumn({ title, tasks, columnId }) {
   const dispatch = useDispatch();
 
   // ADD TASK LOGIC
-  const handleAddTask = (task) => {
-  dispatch(
-    addTask({
-      columnId,
-      task,
-      })
-    );
+  const handleAddTask = async (taskData) => {
+    try {
+      const newTask = {
+      ...taskData,
+      status: columnId,
+    };
+
+    await createTask(newTask);
+    setIsOpen(false);
+
+    window.location.reload();
+    } catch (error) {
+      console.error(error);
+      }
   };
 
   return (
@@ -33,8 +41,9 @@ function TaskColumn({ title, tasks, columnId }) {
 
           {/* ADD TASK BUTTON */}
           <button
-            //onClick={handleAddTask}
+          
             onClick={() => setIsOpen(true)}
+
             className="mb-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
           >
             + Add Task
@@ -43,8 +52,8 @@ function TaskColumn({ title, tasks, columnId }) {
           {/* TASK LIST */}
           {tasks.map((task, index) => (
             <Draggable
-              key={task.id}
-              draggableId={task.id}
+              key={String(task.id)}
+              draggableId={String(task.id)}
               index={index}
             >
               {(provided) => (

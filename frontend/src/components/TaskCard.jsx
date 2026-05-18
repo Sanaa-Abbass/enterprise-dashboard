@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux"
 import {deleteTask} from "../features/taskes/TaskSlice"
 import { updateTask } from "../features/taskes/TaskSlice";
 import TaskModal from "./TaskModal";
+import { deleteTaskApi } from "../api/tasksApi";
+import { updateTaskApi } from "../api/tasksApi";
 
 
 
@@ -16,16 +18,28 @@ function TaskCard({ task, columnId }) {
     Low: "bg-green-100 text-green-600",
   };
 
-  const handleEdit = (updatedTask) => {
-    dispatch(
-      updateTask({
-        columnId,
-        updatedTask,
-      })
-    );
+  const handleDelete = async () => {
+    try {
+      await deleteTaskApi(task.id);
 
-    setIsEditing(false);
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  const handleEdit = async (updatedTask) => {
+  try {
+    await updateTaskApi(task.id, {
+      ...task,
+      ...updatedTask,
+    });
+
+    window.location.reload();
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   return (
      <div className="bg-white p-4 rounded-2xl shadow mb-3 border border-gray-100 hover:scale-[1.02] transition"> 
@@ -54,12 +68,7 @@ function TaskCard({ task, columnId }) {
       </button>
 
       <button
-        onClick={() =>
-          dispatch(deleteTask({
-            columnId,
-            taskId: task.id,
-          }))
-        }
+        onClick={handleDelete}
         className="text-red-500 text-sm"
       >
         Delete

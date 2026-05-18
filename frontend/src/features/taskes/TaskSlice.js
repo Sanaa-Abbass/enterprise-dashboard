@@ -25,6 +25,23 @@ const taskSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
+
+    setTasks: (state, action) => {
+      const tasks = action.payload;
+
+      // clear old tasks
+      state.columns.todo.tasks = [];
+      state.columns.inprogress.tasks = [];
+      state.columns.done.tasks = [];
+
+      // distribute tasks
+      tasks.forEach((task) => {
+        if (state.columns[task.status]) {
+          state.columns[task.status].tasks.push(task);
+        }
+      });
+    },
+
     addTask : (state, action) => {
         const {columnId, task}= action.payload;
         state.columns[columnId].tasks.push(task);
@@ -40,17 +57,33 @@ const taskSlice = createSlice({
     },
 
 
-     moveTask: (state, action) => {
-      const { source, destination } = action.payload;
+    moveTask: (state, action) => {
+      const {
+        sourceColumn,
+        destinationColumn,
+        sourceIndex,
+        destinationIndex,
+      } = action.payload;
 
-      const sourceColumn  = state.columns[source.droppableId];
-      const destinationColumn  = state.columns[destination.droppableId];
+      const sourceTasks =
+        state.columns[sourceColumn].tasks;
 
-      // Remove task from source column
-      const [movedTask] = sourceColumn.tasks.splice(source.index, 1);
+      const destinationTasks =
+        state.columns[destinationColumn].tasks;
 
-      destinationColumn.tasks.splice(destination.index, 0, movedTask);
-    },
+      const [movedTask] = sourceTasks.splice(
+        sourceIndex,
+    1
+      );
+
+      movedTask.status = destinationColumn;
+
+      destinationTasks.splice(
+        destinationIndex,
+        0,
+        movedTask
+      );
+},
 
 
     updateTask: (state, action) => {
@@ -89,5 +122,5 @@ const taskSlice = createSlice({
 
 
 
-export const { addTask, deleteTask, updateTask, moveTask } = taskSlice.actions;
+export const { addTask, deleteTask, updateTask, moveTask, setTasks, } = taskSlice.actions;
 export default taskSlice.reducer;

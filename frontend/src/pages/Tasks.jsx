@@ -1,14 +1,13 @@
-// src/pages/Tasks.jsx
 
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import { DragDropContext } from "@hello-pangea/dnd";
-
 import TaskColumn from "../components/TaskColumn";
 import DashboardStats from "../components/DashboardStats";
-
-import { moveTask } from "../features/taskes/TaskSlice";
+import { moveTask  } from "../features/taskes/TaskSlice";
+import { fetchTasks } from "../api/tasksApi";
+import { setTasks } from "../features/taskes/TaskSlice";
+import { updateTaskApi } from "../api/tasksApi";
 
 function Tasks() {
   const dispatch = useDispatch();
@@ -35,18 +34,56 @@ function Tasks() {
     );
   }, [darkMode]);
 
+ // API load effect
+  useEffect(() => {
+  const load = async () => {
+    try {
+        const res = await fetchTasks();
+        console.log("API DATA:", res.data);
+
+        // dispatch into Redux
+        dispatch(setTasks(res.data));
+      } catch (err) {
+        console.error("API error:", err);
+      }
+    };
+
+      load();
+    }, []);
+
   // ✅ Drag & Drop
-  const onDragEnd = (result) => {
+  const onDragEnd = async (result) => {
     const { source, destination } = result;
 
     if (!destination) return;
 
+  const sourceColumn = source.droppableId;
+  const destinationColumn = destination.droppableId;
+
+  const sourceIndex = source.index;
+  const destinationIndex = destination.index;
+
     dispatch(
       moveTask({
-        source,
-        destination,
+        sourceColumn,
+        destinationColumn,
+        sourceIndex,
+        destinationIndex
       })
     );
+
+    try {
+      const movedTask =
+        columns[sourceColumn].tasks[sourceIndex];
+
+      await updateTaskApi(movedTask.id, {
+        ...movedTask,
+        status: destinationColumn,
+      });
+
+    } catch (error) {
+      console.error("Drag sync failed:", error);
+    }
   };
 
   // ✅ Filter tasks
