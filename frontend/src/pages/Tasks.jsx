@@ -8,6 +8,7 @@ import { moveTask  } from "../features/taskes/TaskSlice";
 import { fetchTasks } from "../api/tasksApi";
 import { setTasks } from "../features/taskes/TaskSlice";
 import { updateTaskApi } from "../api/tasksApi";
+import Navbar from "../components/Navbar";
 
 function Tasks() {
   const dispatch = useDispatch();
@@ -114,6 +115,16 @@ function Tasks() {
   );
 
   return (
+
+    <div className="min-h-screen bg-gray-100">
+
+      <Navbar />
+
+      <div className="p-6">
+        
+        {/* your kanban board */}
+
+      
     <div
       className={`p-6 min-h-screen transition-colors duration-300 ${
         darkMode
@@ -213,6 +224,9 @@ function Tasks() {
           )}
         </div>
       </DragDropContext>
+    </div>
+
+    </div>
     </div>
   );
 }

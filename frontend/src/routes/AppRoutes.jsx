@@ -1,19 +1,24 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Dashboard from "../pages/Dashboard";
-import MainLayout from "../layouts/MainLayout";
-import Tasks from "../pages/Tasks";
+import { Routes, Route } from "react-router-dom";
+
 import Login from "../pages/Login";
+import Tasks from "../pages/Tasks";
+
+import ProtectedRoute from "../components/ProtectedRoute";
 
 function AppRoutes() {
   return (
-    <BrowserRouter>
-      <MainLayout>
-        <Routes>
-          <Route path="/tasks" element={<Tasks />} />
-          <Route path="/" element={<Login />} />
-        </Routes>
-      </MainLayout>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Login />} />
+
+      <Route
+        path="/tasks"
+        element={
+          <ProtectedRoute>
+            <Tasks />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
   );
 }
 
