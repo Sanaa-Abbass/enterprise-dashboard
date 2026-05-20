@@ -1,49 +1,33 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { useNavigate ,  Link} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
-
-function Login() {
+function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("access");
-
-    if (token) {
-      navigate("/tasks");
-    }
-  }, [navigate]);
-
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await axios.post(
-        "http://127.0.0.1:8000/api/token/",
+      await axios.post(
+        "https://enterprise-dashboard-ss23.onrender.com/api/register/",
         {
           username,
           password,
         }
       );
 
-      localStorage.setItem(
-        "access",
-        res.data.access
-      );
+      alert("Account created successfully!");
 
-      localStorage.setItem(
-        "refresh",
-        res.data.refresh
-      );
-
-      navigate("/tasks");
+      navigate("/");
 
     } catch (error) {
-      console.error("Login failed:", error);
-      alert("Invalid username or password");
+      console.error(error);
+
+      alert("Registration failed");
     }
   };
 
@@ -51,11 +35,11 @@ function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
 
       <form
-        onSubmit={handleLogin}
+        onSubmit={handleRegister}
         className="bg-white p-8 rounded-xl shadow-lg w-96"
       >
         <h1 className="text-3xl font-bold mb-6 text-center">
-          Login
+          Register
         </h1>
 
         <input
@@ -80,20 +64,19 @@ function Login() {
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600"
+          className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600"
         >
-          Login
+          Create Account
         </button>
 
-        
         <p className="mt-4 text-center">
-          Don’t have an account?
+          Already have an account?
 
           <Link
-            to="/register"
+            to="/"
             className="text-blue-500 ml-2"
           >
-            Register
+            Login
           </Link>
         </p>
       </form>
@@ -101,4 +84,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

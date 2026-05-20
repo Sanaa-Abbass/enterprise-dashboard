@@ -4,6 +4,7 @@ import Login from "../pages/Login";
 import Tasks from "../pages/Tasks";
 
 import ProtectedRoute from "../components/ProtectedRoute";
+import Register from "../pages/Register";
 
 function AppRoutes() {
   return (
@@ -18,6 +19,8 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+
+      <Route path="/register" element={<Register />} />
     </Routes>
   );
 }
