@@ -13,7 +13,8 @@ function Register() {
 
     try {
       await axios.post(
-        "https://enterprise-dashboard-ss23.onrender.com/api/register/",
+        `${import.meta.env.VITE_API_URL}/register/`,
+        //"https://enterprise-dashboard-ss23.onrender.com/api/register/",
         {
           username,
           password,
