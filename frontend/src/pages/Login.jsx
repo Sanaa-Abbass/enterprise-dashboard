@@ -22,9 +22,8 @@ function Login() {
 
     try {
       const res = await axios.post(
-        "${import.meta.env.VITE_API_URL}/token/",
-        //"https://enterprise-dashboard-ss23.onrender.com/api/token/",
-        {
+         `${import.meta.env.VITE_API_URL}/token/`,
+         {
           username,
           password,
         }
