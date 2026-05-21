@@ -11,7 +11,7 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    console.log(import.meta.env.VITE_API_URL);
+   // console.log(import.meta.env.VITE_API_URL);
     try {
       await axios.post(
         `${import.meta.env.VITE_API_URL}/register/`,
