@@ -5,6 +5,7 @@ import { addTask } from "../features/taskes/TaskSlice";
 import TaskModal from "./TaskModal";
 import { useState } from "react";
 import { createTask } from "../api/tasksApi";
+import { addTask } from "../services/taskService";
 
 
 function TaskColumn({ title, tasks, columnId }) {
@@ -19,7 +20,7 @@ function TaskColumn({ title, tasks, columnId }) {
       status: columnId,
     };
 
-    await createTask(newTask);
+    await addTask(newTask);
     setIsOpen(false);
 
     window.location.reload();

@@ -5,10 +5,11 @@ import { DragDropContext } from "@hello-pangea/dnd";
 import TaskColumn from "../components/TaskColumn";
 import DashboardStats from "../components/DashboardStats";
 import { moveTask  } from "../features/taskes/TaskSlice";
-import { fetchTasks } from "../api/tasksApi";
+
 import { setTasks } from "../features/taskes/TaskSlice";
-import { updateTaskApi } from "../api/tasksApi";
+
 import Navbar from "../components/Navbar";
+import { getTasks, updateTask } from "../services/taskService";
 
 function Tasks() {
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ function Tasks() {
   useEffect(() => {
   const load = async () => {
     try {
-        const res = await fetchTasks();
+        const res = await getTasks();
         console.log("API DATA:", res.data);
 
         // dispatch into Redux
@@ -77,7 +78,7 @@ function Tasks() {
       const movedTask =
         columns[sourceColumn].tasks[sourceIndex];
 
-      await updateTaskApi(movedTask.id, {
+      await updateTask(movedTask.id, {
         ...movedTask,
         status: destinationColumn,
       });

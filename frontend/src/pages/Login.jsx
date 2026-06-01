@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate ,  Link} from "react-router-dom";
-
+import { loginUser } from "../services/authService";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -21,13 +20,10 @@ function Login() {
     e.preventDefault();
 
     try {
-      const res = await axios.post(
-         `${import.meta.env.VITE_API_URL}/token/`,
-         {
-          username,
-          password,
-        }
-      );
+      const res = await loginUser({
+        username,
+        password,
+      });
 
       localStorage.setItem(
         "access",

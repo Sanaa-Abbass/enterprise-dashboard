@@ -3,9 +3,7 @@ import { useDispatch } from "react-redux"
 import {deleteTask} from "../features/taskes/TaskSlice"
 import { updateTask } from "../features/taskes/TaskSlice";
 import TaskModal from "./TaskModal";
-import { deleteTaskApi } from "../api/tasksApi";
-import { updateTaskApi } from "../api/tasksApi";
-
+import { deleteTask, updateTask  } from "../services/taskService";
 
 
 function TaskCard({ task, columnId }) {
@@ -20,7 +18,7 @@ function TaskCard({ task, columnId }) {
 
   const handleDelete = async () => {
     try {
-      await deleteTaskApi(task.id);
+      await deleteTask(task.id);
 
       window.location.reload();
     } catch (error) {
@@ -30,7 +28,7 @@ function TaskCard({ task, columnId }) {
 
   const handleEdit = async (updatedTask) => {
   try {
-    await updateTaskApi(task.id, {
+    await updateTask(task.id, {
       ...task,
       ...updatedTask,
     });

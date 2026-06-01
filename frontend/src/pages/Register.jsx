@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import { registerUser } from "../services/authService";
 import { useNavigate, Link } from "react-router-dom";
 
 function Register() {
@@ -13,14 +13,10 @@ function Register() {
 
    // console.log(import.meta.env.VITE_API_URL);
     try {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/register/`,
-        {
-          username,
-          password,
-        }
-      );
-
+      await registerUser({
+        username,
+        password,
+      });
       alert("Account created successfully!");
 
       navigate("/");
