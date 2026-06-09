@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux"
-import {deleteTask} from "../features/taskes/TaskSlice"
-import { updateTask } from "../features/taskes/TaskSlice";
 import TaskModal from "./TaskModal";
 import { deleteTask, updateTask  } from "../services/taskService";
+import { useDispatch } from "react-redux";
+import React from "react";
 
 
 function TaskCard({ task, columnId }) {

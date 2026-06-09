@@ -8,14 +8,14 @@ function TaskModal({
 }) {
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("Low");
-  const [dueDate, setDueDate] = useState("");
+  const [due_date, setDueDate] = useState("");
 
   // ✅ Load editing data correctly
   useEffect(() => {
     if (editingTask) {
       setTitle(editingTask.title || "");
       setPriority(editingTask.priority || "Low");
-      setDueDate(editingTask.dueDate || "");
+      setDueDate(editingTask.due_date || "");
     } else {
       setTitle("");
       setPriority("Low");
@@ -32,7 +32,7 @@ function TaskModal({
       id: editingTask?.id || Date.now().toString(),
       title,
       priority,
-      dueDate,
+      due_date,
     });
 
     onClose();
@@ -65,7 +65,7 @@ function TaskModal({
 
         <input
           type="date"
-          value={dueDate}
+          value={due_date}
           onChange={(e) => setDueDate(e.target.value)}
           className="w-full border p-2 rounded mb-4"
         />

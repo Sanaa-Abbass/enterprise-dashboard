@@ -1,10 +1,9 @@
 import TaskCard from "./TaskCard";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import { useDispatch } from "react-redux";
-import { addTask } from "../features/taskes/TaskSlice";
 import TaskModal from "./TaskModal";
 import { useState } from "react";
-import { createTask } from "../api/tasksApi";
+
 import { addTask } from "../services/taskService";
 
 
@@ -15,10 +14,13 @@ function TaskColumn({ title, tasks, columnId }) {
   // ADD TASK LOGIC
   const handleAddTask = async (taskData) => {
     try {
+      console.log("taskData:", taskData);
       const newTask = {
       ...taskData,
       status: columnId,
     };
+
+    console.log("Sending task:", newTask);
 
     await addTask(newTask);
     setIsOpen(false);
